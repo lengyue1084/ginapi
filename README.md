@@ -8,9 +8,9 @@ biz负责定义repo/usercase，data层负责实现repo，
 ```
 ├── api  // 定义输入/输出的结构体
 │   ├── user //对应user模块
-│   ├── user.go
+│       ├── user.go //user模块相关的结构体
 │   └── order //对应order模块
-│   └── order.go
+│       └── order.go //user模块相关的结构体
 ├── cmd  // 应用入口文件
 │   ├── main.go //入口文件
 │   ├── wire.go //依赖注入文件
