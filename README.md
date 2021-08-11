@@ -1,7 +1,6 @@
-# ginapi structure
-#### 基于gin的api脚手架集成了gorm/zap/viper/go-redis/gin
-### 利用wire依赖注入管理，biz层具体实现解耦
-### 后续会增加错误处理、平滑启动等功能
+#### 基于gin的api脚手架，集成了gorm/zap/viper/go-redis
+### wire管理依赖注入，biz定义repo/usercase
+### 待增加功能：错误处理、平滑启动等
 ```
 ├── api  // 定义输入/输出的结构体
 │   ├── user //对应user模块
