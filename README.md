@@ -1,6 +1,10 @@
-#### 基于gin的api脚手架，集成了gorm/zap/viper/go-redis
-### wire管理依赖注入，biz定义repo/usercase
-### 待增加功能：错误处理、平滑启动等
+#### 基于gin的api脚手架
+已经集成了gorm/zap/viper/go-redis组件，
+wire负责管理依赖注入，
+biz负责定义repo/usercase，data层负责实现repo，
+实际开发只需要在api目录定义输入输出结构体，router添加路由，internal目录分别实现数据校验（gin自带的），逻辑处理即可
+
+待增加功能：错误处理、平滑启动等
 ```
 ├── api  // 定义输入/输出的结构体
 │   ├── user //对应user模块
