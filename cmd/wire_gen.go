@@ -19,7 +19,7 @@ import (
 // Injectors from wire.go:
 
 // initApp init gin application.
-func initApp(config *conf.Conf, logger *zap.Logger) (*gin.Engine, func(), error) {
+func initApp(config *conf.Conf, log *zap.Logger) (*gin.Engine, func(), error) {
 	middlewareMiddleware := middleware.NewMiddleware()
 	app := router.NewApp(middlewareMiddleware)
 	db, cleanup, err := data.NewGormClient(config)
@@ -31,15 +31,15 @@ func initApp(config *conf.Conf, logger *zap.Logger) (*gin.Engine, func(), error)
 		cleanup()
 		return nil, nil, err
 	}
-	userData, cleanup3, err := data.NewUserData(db, client, logger)
+	userData, cleanup3, err := data.NewUserData(db, client, log)
 	if err != nil {
 		cleanup2()
 		cleanup()
 		return nil, nil, err
 	}
 	userRepo := data.NewUserRepo(userData)
-	userUseCase := biz.NewUserUseCase(userRepo)
-	userServer := service.NewUserService(userUseCase)
+	userUseCase := biz.NewUserUseCase(userRepo, log)
+	userServer := service.NewUserService(userUseCase, log)
 	engine := router.NewRouter(app, userServer)
 	return engine, func() {
 		cleanup3()

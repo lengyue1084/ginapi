@@ -27,13 +27,13 @@ type Data struct {
 	// TODO warpped database client
 	db    *gorm.DB
 	redis *redis.Client
-	log *zap.Logger
+	log   *zap.Logger
 }
 
 type UserData struct {
 	db    *gorm.DB
 	redis *redis.Client
-	log *zap.Logger
+	log   *zap.Logger
 }
 
 func NewGormClient(config *conf.Conf) (*gorm.DB, func(), error) {
@@ -60,11 +60,11 @@ func NewGormClient(config *conf.Conf) (*gorm.DB, func(), error) {
 	dbOpen.AutoMigrate(model.User{})
 	cleanup := func() {
 		if err := db.Close(); err != nil {
-			fmt.Println("close mysql err:", err)
+			log.Println("close mysql err:", err)
 		}
-		fmt.Println("close mysql success")
+		log.Println("close mysql success")
 	}
-	fmt.Println("open mysql sucess")
+	log.Println("open mysql success")
 	return dbOpen, cleanup, nil
 }
 
@@ -75,7 +75,7 @@ func NewData(
 	log *zap.Logger,
 ) (*Data, func(), error) {
 	cleanup := func() {
-		fmt.Println("closing the data resources")
+		log.Info("closing the data resources")
 	}
 	return &Data{db: db, redis: redis}, cleanup, nil
 }
@@ -86,19 +86,19 @@ func NewUserData(
 	log *zap.Logger,
 ) (*UserData, func(), error) {
 	cleanup := func() {
-		fmt.Println("closing the data resources")
+		log.Info("closing the data resources")
 	}
-	return &UserData{db: db, redis: redis,log: log}, cleanup, nil
+	return &UserData{db: db, redis: redis, log: log}, cleanup, nil
 }
 
 func NewRedisClient(config *conf.Conf) (*redis.Client, func(), error) {
 	var ctx = context.Background()
-	fmt.Println( fmt.Sprintf("%s:%s", config.Conf.GetString("data.redis.addr"), config.Conf.GetString("data.redis.port")))
+	fmt.Println(fmt.Sprintf("%s:%s", config.Conf.GetString("data.redis.addr"), config.Conf.GetString("data.redis.port")))
 	rdb := redis.NewClient(&redis.Options{
 		Addr:         fmt.Sprintf("%s:%s", config.Conf.GetString("data.redis.addr"), config.Conf.GetString("data.redis.port")),
 		Username:     config.Conf.GetString("username"),
 		Password:     config.Conf.GetString("password"),
-		DB:           config.Conf.GetInt("default_db"),  // use default DB
+		DB:           config.Conf.GetInt("default_db"), // use default DB
 		DialTimeout:  config.Conf.GetDuration("dial_timeout"),
 		ReadTimeout:  config.Conf.GetDuration("read_timeout"),
 		WriteTimeout: config.Conf.GetDuration("write_timeout"),
@@ -106,9 +106,9 @@ func NewRedisClient(config *conf.Conf) (*redis.Client, func(), error) {
 	_, err := rdb.Ping(ctx).Result()
 	cleanup := func() {
 		if err := rdb.Close(); err != nil {
-			fmt.Println("close redis err:", err)
+			log.Println("close redis err:", err)
 		}
-		fmt.Println("close redis success")
+		log.Println("close redis success")
 	}
 	if err != nil {
 		log.Println("redis open error:", err)

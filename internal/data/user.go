@@ -1,12 +1,11 @@
 package data
 
 import (
-	"fmt"
 	"ginapi/api/user"
 	"ginapi/internal/biz"
 	"ginapi/internal/data/model"
 	"github.com/gin-gonic/gin"
-	"reflect"
+	"go.uber.org/zap"
 	"time"
 )
 
@@ -25,22 +24,24 @@ func (u *userRepo) Login(ctx *gin.Context) (*user.LoginReplay, error) {
 		Name: "WQ",
 		Age:  18,
 	}
-	res := u.UserData.db.Create(&userMode)
-	fmt.Println(res)
-	var user1 []model.User
-	result := u.UserData.db.Table("users").Find(&user1)
-	fmt.Println(reflect.TypeOf(&user1))
-	fmt.Println(result)
-	fmt.Println(userMode)
+	u.UserData.log.Info("data 日志示例")
+	_ = u.UserData.db.Create(&userMode)
+	var userList []model.User
+	_ = u.UserData.db.Table("users").Find(&userList)
+	u.UserData.log.Info("gorm示例",
+		zap.String("第一条数据的name值", userList[0].Name),
+		zap.Uint8("第二条数据的age值", userList[1].Age),
+	)
 	var list = user.LoginReplay{
 		Code:    0,
 		Message: "success",
 	}
 	//err := rdb.Set(ctx, "key", "value", 0).Err()
 	u.UserData.redis.Set(ctx, "ginapi:user01", "WQredis", 10*time.Second)
-	key := u.UserData.redis.Get(ctx, "ginapi:user01")
-	fmt.Println(key)
-	u.UserData.log.Info("111111111111")
+	val := u.UserData.redis.Get(ctx, "ginapi:user01").Val()
+	u.UserData.log.Info("redis示例",
+		zap.String("ginapi:user01：", val),
+	)
 
 	return &list, nil
 }

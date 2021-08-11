@@ -17,6 +17,6 @@ import (
 )
 
 // initApp init gin application.
-func initApp(config *conf.Conf,logger *zap.Logger) (*gin.Engine, func(), error) {
-	panic(wire.Build(middleware.ProviderSet,data.ProviderSet, biz.ProviderSet, service.ProviderSet, router.ProviderSet))
+func initApp(config *conf.Conf, log *zap.Logger) (*gin.Engine, func(), error) {
+	panic(wire.Build(middleware.ProviderSet, data.ProviderSet, biz.ProviderSet, service.ProviderSet, router.ProviderSet))
 }

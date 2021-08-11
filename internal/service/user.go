@@ -1,22 +1,24 @@
 package service
 
 import (
-	"fmt"
 	"ginapi/internal/biz"
 	"github.com/gin-gonic/gin"
+	"go.uber.org/zap"
 )
 
 type UserServer struct {
-	uc *biz.UserUseCase
+	uc  *biz.UserUseCase
+	log *zap.Logger
 }
 
-func NewUserService(uc *biz.UserUseCase) *UserServer {
+func NewUserService(uc *biz.UserUseCase, log *zap.Logger) *UserServer {
 	return &UserServer{
-		uc: uc,
+		uc:  uc,
+		log: log,
 	}
 }
 
 func (u *UserServer) Login(ctx *gin.Context) {
-	fmt.Println(111111111111)
+	u.log.Info("service示例")
 	u.uc.UserLogin(ctx)
 }
