@@ -1,0 +1,24 @@
+server:
+  http:
+    addr: 127.0.0.1
+    port: 9004
+    timeout: 1s
+  grpc:
+    addr: 127.0.0.1
+    port: 9005
+    timeout: 1s
+data:
+  database:
+    driver: mysql
+    source: root:root@tcp(127.0.0.1:3306)/kratoscms?charset=utf8mb4&parseTime=True&loc=Local
+    max_idle_conn: 50
+    max_open_conn: 100
+  redis:
+    addr: 127.0.0.1
+    port: 6379
+    default_db: 0
+    username:
+    password:
+    dial_timeout: 0.2s
+    read_timeout: 0.2s
+    write_timeout: 0.2s
