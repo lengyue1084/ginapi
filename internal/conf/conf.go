@@ -5,6 +5,7 @@ import (
 	"github.com/fsnotify/fsnotify"
 	"github.com/google/wire"
 	"github.com/spf13/viper"
+	"go.uber.org/zap"
 )
 
 var ProviderSet = wire.NewSet(NewConf)
@@ -31,4 +32,13 @@ func NewConf() *Conf {
 	return &Conf{
 		Conf: viper,
 	}
+}
+
+func NewZap() *zap.Logger {
+	logger, err := zap.NewProduction()
+	if err != nil {
+		panic(err)
+	}
+	defer logger.Sync()
+	return logger
 }

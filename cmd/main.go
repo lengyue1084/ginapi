@@ -11,32 +11,24 @@ import (
 var (
 	Name     = "ginApi"
 	Version  = "1.0.0"
-	flagconf string
+	flagConf string
 	id, _    = os.Hostname()
-	logger   = NewZap()
+	logger   *zap.Logger
 )
 
 func main() {
-	conf := conf.NewConf()
-	app, cleanup, err := initApp(conf, logger)
+	config := conf.NewConf()
+	logger = conf.NewZap()
+	app, cleanup, err := initApp(config, logger)
 	if err != nil {
 		panic(err)
 	}
 	defer cleanup()
 	// 启动服务
 	if err := app.Run(
-		fmt.Sprintf("%s:%s", conf.Conf.GetString("server.http.addr"),
-			conf.Conf.GetString("server.http.port")),
+		fmt.Sprintf("%s:%s", config.Conf.GetString("server.http.addr"),
+			config.Conf.GetString("server.http.port")),
 	); err != nil {
 		panic(err)
 	}
-}
-
-func NewZap() *zap.Logger {
-	logger, err := zap.NewProduction()
-	if err != nil {
-		panic(err)
-	}
-	defer logger.Sync()
-	return logger
 }
