@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"ginapi/internal/conf"
 	"go.uber.org/zap"
@@ -16,8 +17,12 @@ var (
 	logger   *zap.Logger
 )
 
+func init() {
+	flag.StringVar(&flagConf, "conf", "./configs", "config path, eg: -conf config.yaml")
+}
 func main() {
-	config := conf.NewConf()
+	flag.Parse()
+	config := conf.NewConf(flagConf)
 	logger = conf.NewZap()
 	app, cleanup, err := initApp(config, logger)
 	if err != nil {
