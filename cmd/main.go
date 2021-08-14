@@ -10,8 +10,6 @@ import (
 
 // go build -ldflags "-X main.Version=x.y.z"
 var (
-	Name     = "ginApi"
-	Version  = "1.0.0"
 	flagConf string
 	id, _    = os.Hostname()
 	logger   *zap.Logger
@@ -23,7 +21,7 @@ func init() {
 func main() {
 	flag.Parse()
 	config := conf.NewConf(flagConf)
-	logger = conf.NewZap()
+	logger = conf.NewZap(config)
 	app, cleanup, err := initApp(config, logger)
 	if err != nil {
 		panic(err)
