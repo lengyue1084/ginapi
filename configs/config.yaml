@@ -1,5 +1,7 @@
 server:
   http:
+    name: "ginApi"
+    version: 1.0.0
     addr: 127.0.0.1
     port: 9004
     timeout: 1s
@@ -22,3 +24,9 @@ data:
     dial_timeout: 0.2s
     read_timeout: 0.2s
     write_timeout: 0.2s
+log:
+  file:
+    path: "./logs"
+    type: "json"
+    dev: false
+
