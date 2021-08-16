@@ -57,7 +57,9 @@ func NewGormClient(config *conf.Conf) (*gorm.DB, func(), error) {
 	db.SetMaxIdleConns(config.Conf.GetInt("data.database.max_idle_conn"))
 	db.SetMaxOpenConns(config.Conf.GetInt("data.database.max_open_conn"))
 	// 迁移 schema
-	dbOpen.AutoMigrate(model.User{})
+	if err := dbOpen.AutoMigrate(model.User{}); err != nil {
+		panic(err)
+	}
 	cleanup := func() {
 		if err := db.Close(); err != nil {
 			log.Println("close mysql err:", err)
@@ -93,7 +95,6 @@ func NewUserData(
 
 func NewRedisClient(config *conf.Conf) (*redis.Client, func(), error) {
 	var ctx = context.Background()
-	fmt.Println(fmt.Sprintf("%s:%s", config.Conf.GetString("data.redis.addr"), config.Conf.GetString("data.redis.port")))
 	rdb := redis.NewClient(&redis.Options{
 		Addr:         fmt.Sprintf("%s:%s", config.Conf.GetString("data.redis.addr"), config.Conf.GetString("data.redis.port")),
 		Username:     config.Conf.GetString("username"),
@@ -111,9 +112,9 @@ func NewRedisClient(config *conf.Conf) (*redis.Client, func(), error) {
 		log.Println("close redis success")
 	}
 	if err != nil {
-		log.Println("redis open error:", err)
+		log.Println("open redis error:", err)
 		return nil, cleanup, err
 	}
-	log.Println("redis open success")
+	log.Println("open redis success")
 	return rdb, cleanup, nil
 }
