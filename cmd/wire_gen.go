@@ -39,8 +39,9 @@ func initApp(config *conf.Conf, log *zap.Logger) (*gin.Engine, func(), error) {
 	}
 	userRepo := data.NewUserRepo(userData)
 	userUseCase := biz.NewUserUseCase(userRepo, log)
-	userServer := service.NewUserService(userUseCase, log)
-	engine := router.NewRouter(app, userServer)
+	userService := service.NewUserService(userUseCase, log)
+	homeService := service.NewHome(log)
+	engine := router.NewRouter(app, userService, homeService)
 	return engine, func() {
 		cleanup3()
 		cleanup2()
