@@ -37,7 +37,7 @@ func NewZap(conf *Conf) *zap.Logger {
 	if logType != "" {
 		logType = "json"
 	}
-	dev := conf.Conf.GetBool("log.file.prod")
+	dev := conf.Conf.GetBool("server.dev")
 	config := zap.Config{
 		Level:            atom,                                                                           // 日志级别
 		Development:      dev,                                                                            // 开发模式，堆栈跟踪
