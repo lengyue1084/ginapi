@@ -21,7 +21,7 @@ import (
 // initApp init gin application.
 func initApp(config *conf.Conf, log *zap.Logger) (*gin.Engine, func(), error) {
 	middlewareMiddleware := middleware.NewMiddleware()
-	app := router.NewApp(middlewareMiddleware)
+	app := router.NewApp(middlewareMiddleware, config)
 	db, cleanup, err := data.NewGormClient(config)
 	if err != nil {
 		return nil, nil, err
