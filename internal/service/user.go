@@ -6,19 +6,19 @@ import (
 	"go.uber.org/zap"
 )
 
-type UserServer struct {
+type UserService struct {
 	uc  *biz.UserUseCase
 	log *zap.Logger
 }
 
-func NewUserService(uc *biz.UserUseCase, log *zap.Logger) *UserServer {
-	return &UserServer{
+func NewUserService(uc *biz.UserUseCase, log *zap.Logger) *UserService {
+	return &UserService{
 		uc:  uc,
 		log: log,
 	}
 }
 
-func (u *UserServer) Login(ctx *gin.Context) {
+func (u *UserService) Login(ctx *gin.Context) {
 	u.log.Info("service示例")
 	u.uc.UserLogin(ctx)
 }
