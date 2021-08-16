@@ -5,6 +5,8 @@ import (
 	"ginapi/tool"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
+	"io/fs"
+	"os"
 )
 
 func NewZap(conf *Conf) *zap.Logger {
@@ -23,7 +25,14 @@ func NewZap(conf *Conf) *zap.Logger {
 	}
 	// 设置日志级别
 	atom := zap.NewAtomicLevelAt(zap.DebugLevel)
-	filename := conf.Conf.GetString("log.file.path") + "/" + tool.Date("Y-m-d") + ".log"
+
+	logPath := conf.Conf.GetString("log.file.path")
+	if _, err := tool.PathExists(logPath); err == nil {
+		if err = os.MkdirAll(logPath, fs.ModePerm); err != nil {
+			panic(err)
+		}
+	}
+	filename := logPath + "/" + tool.Date("Y-m-d") + ".log"
 	logType := conf.Conf.GetString("log.file.type")
 	if logType != "" {
 		logType = "json"
@@ -42,9 +51,6 @@ func NewZap(conf *Conf) *zap.Logger {
 	logger, err := config.Build()
 	if err != nil {
 		panic(fmt.Sprintf("log 初始化失败: %v", err))
-	}
-	if err != nil {
-		panic(err)
 	}
 	defer logger.Sync()
 	return logger
