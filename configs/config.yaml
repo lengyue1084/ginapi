@@ -1,4 +1,5 @@
 server:
+  dev: false
   http:
     name: "ginApi"
     version: 1.0.0
@@ -28,5 +29,4 @@ log:
   file:
     path: "./logs"
     type: "json"
-    dev: false
 
