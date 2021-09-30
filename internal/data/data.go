@@ -15,22 +15,14 @@ import (
 
 // ProviderSet is data providers.
 var ProviderSet = wire.NewSet(
-	NewData,
 	NewUserData,
 	NewUserRepo,
 	NewGormClient,
 	NewRedisClient,
 )
 
-// Data .
-type Data struct {
-	// TODO warpped database client
-	db    *gorm.DB
-	redis *redis.Client
-	log   *zap.Logger
-}
-
 type UserData struct {
+	// TODO warpped database client
 	db    *gorm.DB
 	redis *redis.Client
 	log   *zap.Logger
@@ -68,18 +60,6 @@ func NewGormClient(config *conf.Conf) (*gorm.DB, func(), error) {
 	}
 	log.Println("open mysql success")
 	return dbOpen, cleanup, nil
-}
-
-// NewData .
-func NewData(
-	db *gorm.DB,
-	redis *redis.Client,
-	log *zap.Logger,
-) (*Data, func(), error) {
-	cleanup := func() {
-		log.Info("closing the data resources")
-	}
-	return &Data{db: db, redis: redis}, cleanup, nil
 }
 
 func NewUserData(

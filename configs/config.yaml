@@ -1,5 +1,5 @@
 server:
-  dev: false
+  dev: true
   http:
     name: "ginApi"
     version: 1.0.0
